@@ -11,7 +11,7 @@ const Home = props => {
           <div className="column ui segment">
             <h2>{`${props.customers.length}`}</h2>
             <h2>
-              <Link to="/Customers">Customers</Link>
+              <Link to="/customers">Customers</Link>
             </h2>
           </div>
         </div>
@@ -19,7 +19,7 @@ const Home = props => {
           <div className="ui segment">
             <h2>{`${props.campaigns.length}`}</h2>
             <h2>
-              <Link to="/Campaigns">Campaigns</Link>
+              <Link to="/campaigns">Campaigns</Link>
             </h2>
           </div>
         </div>

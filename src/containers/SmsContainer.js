@@ -5,9 +5,11 @@ import { handleSignIn } from "../actions/users";
 import Home from "../components/Home";
 import CampaignsContainer from "../containers/CampaignsContainer";
 import CustomersContainer from "../containers/CustomersContainer";
-import NewCampaignForm from "../components/NewCampaignForm";
+import CampaignForm from "../components/CampaignForm";
+import CustomersForm from "../components/CustomersForm";
 import Messages from "../components/Messages";
-import Container from "../components/Container";
+// import CustomersDraggableContainer from "../containers/CustomersDraggableContainer";
+// import Container from "../components/Container";
 
 class SmsContainer extends React.Component {
   state = {
@@ -57,7 +59,7 @@ class SmsContainer extends React.Component {
               path="/campaigns/new"
               render={() =>
                 this.props.loggedIn ? (
-                  <NewCampaignForm />
+                  <CampaignForm />
                 ) : (
                   <Redirect to="/login" />
                 )
@@ -77,7 +79,7 @@ class SmsContainer extends React.Component {
                 );
                 return (
                   <div>
-                    <Container />
+                    <CampaignsContainer />
                   </div>
                 );
               }}
@@ -95,6 +97,36 @@ class SmsContainer extends React.Component {
             />
             <Route
               exact
+              path="/customers/new"
+              render={() =>
+                this.props.loggedIn ? (
+                  <CustomersForm />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
+            />
+            <Route
+              path="/customers/:id/"
+              render={({ match }) => {
+                const customers = this.props.customers.find(el => {
+                  // debugger;
+                  return el.id === match.params.id;
+                });
+                campaign ? (
+                  this.props.handleClick(campaign.id)
+                ) : (
+                  <div>Loading</div>
+                );
+                return (
+                  <div>
+                    <CustomersContainer />
+                  </div>
+                );
+              }}
+            />
+            <Route
+              exact
               path="/customers"
               render={() =>
                 this.props.loggedIn ? (
@@ -106,32 +138,10 @@ class SmsContainer extends React.Component {
             />
             <Route
               exact
-              path="/replies"
+              path="/Messages"
               render={() =>
                 this.props.loggedIn ? (
-                  <div className="campaignsList">
-                    {
-                      //   <ActionCable
-                      //   channel={{ channel: "CampaignsChannel" }}
-                      //   onReceived={this.handleReceivedCampaign}
-                      // />
-                      // {this.state.campaigns.length ? (
-                      //   <Cable
-                      //     campaigns={this.state.campaigns}
-                      //     handleReceivedMessage={this.handleReceivedMessage}
-                      //   />
-                      // ) : null}
-                      // <h2>Campaigns</h2>
-                      // <ul>{mapCampaigns(campaign, this.handleClick)}</ul>
-                      // <NewCampaignForm />
-                      // {activeCampaign ? (
-                      //   <Messages
-                      //     campaign={findActiveCampaign(campaign, activeCampaign)}
-                      //   />
-                      // ) : null
-                    }
-                    }{" "}
-                  </div>
+                  <div className="campaignsList" />
                 ) : (
                   <Redirect to="/login" />
                 )

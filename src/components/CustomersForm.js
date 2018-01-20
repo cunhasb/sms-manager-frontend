@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { commitAdd } from "../actions/campaigns";
 
-class NewCampaignForm extends React.Component {
+class CustomerForm extends React.Component {
   state = {
     name: ""
   };
@@ -20,7 +20,7 @@ class NewCampaignForm extends React.Component {
 
   render = () => {
     return (
-      <div className="newCampaignForm">
+      <div className="CustomerForm">
         <form onSubmit={this.handleSubmit}>
           <label>New Campaign:</label>
           <br />
@@ -36,4 +36,4 @@ class NewCampaignForm extends React.Component {
   };
 }
 
-export default connect(null, { commitAdd })(NewCampaignForm);
+export default connect(null, { commitAdd })(CustomerForm);

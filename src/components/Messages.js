@@ -1,12 +1,12 @@
 import React from "react";
-import NewMessageForm from "./NewMessageForm";
+import MessageForm from "./MessageForm";
 
 const MessagesArea = ({ messages: { id, name } }) => {
   return (
     <div className="messagesArea">
       <h2>{name}</h2>
       <ul>{orderedMessages(name)}</ul>
-      <NewMessageForm conversation_id={id} />
+      <MessageForm conversation_id={id} />
     </div>
   );
 };

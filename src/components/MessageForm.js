@@ -1,7 +1,7 @@
 import React from "react";
 import { API_ROOT, HEADERS } from "../constants";
 
-class NewMessageForm extends React.Component {
+class MessageForm extends React.Component {
   state = {
     text: "",
     campaign_id: this.props.campaign_id
@@ -28,7 +28,7 @@ class NewMessageForm extends React.Component {
 
   render = () => {
     return (
-      <div className="newMessageForm">
+      <div className="MessageForm">
         <form onSubmit={this.handleSubmit}>
           <label>New Message:</label>
           <br />
@@ -44,4 +44,4 @@ class NewMessageForm extends React.Component {
   };
 }
 
-export default NewMessageForm;
+export default MessageForm;

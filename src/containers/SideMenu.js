@@ -1,6 +1,8 @@
 import React from "react";
+import { Input, Label, Menu, List } from "semantic-ui-react";
 
 const SideMenu = props => {
+  // debugger;
   return (
     <div className="ui massive vertical menu ">
       <div className="horizontally fitted item">

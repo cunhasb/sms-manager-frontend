@@ -4,12 +4,14 @@ import { Header } from "semantic-ui-react";
 import { connect } from "react-redux";
 
 const Home = props => {
+  // debugger;
+  console.log("props inside home", props.messages.length);
   return (
     <div>
       <div className="three column stackable ui grid">
         <div className="column">
           <div className="column ui segment">
-            <h2>{`${props.customers.length}`}</h2>
+            <h2>{props.customers.length}</h2>
             <h2>
               <Link to="/customers">Customers</Link>
             </h2>
@@ -17,7 +19,7 @@ const Home = props => {
         </div>
         <div className="column">
           <div className="ui segment">
-            <h2>{`${props.campaigns.length}`}</h2>
+            <h2>{props.campaigns.length}</h2>
             <h2>
               <Link to="/campaigns">Campaigns</Link>
             </h2>
@@ -25,11 +27,9 @@ const Home = props => {
         </div>
         <div className="column">
           <div className="ui segment">
-            <h2>{`${
-              props.replies !== undefined ? props.replies.lenght : 0
-            }`}</h2>
+            <h2>{props.messages.length}</h2>
             <h2>
-              <Link to="/replies">Replies</Link>
+              <Link to="/messages">Messages</Link>
             </h2>
           </div>
         </div>
@@ -51,11 +51,11 @@ const Home = props => {
   );
 };
 const mapStateToProps = state => {
-  // debugger;
   return {
-    customers: state.customers.customers,
-    campaigns: state.campaigns
-    // replies: state.messages.messages
+    customers: state.customers,
+    campaigns: state.campaigns,
+    messages: state.messages,
+    carriers: state.carriers
   };
 };
 

@@ -1,5 +1,20 @@
 import { API_ROOT, HEADERS } from "../constants/";
-export const getMessages = id => {
+export const getMessages = (userId, id) => {
+  // debugger;
+  console.log("got inside getmessages", userId);
+  return dispatch => {
+    return fetch(`${API_ROOT}/messages/`)
+      .then(res => res.json())
+      .then(json => {
+        // console.log("getMessages fetch", json);
+        dispatch({
+          type: "ADD_MESSAGES",
+          messages: json
+        });
+      });
+  };
+};
+export const getMessage = id => {
   return dispatch => {
     return fetch(`${API_ROOT}/messages/${id}`).then(console.log);
   };
@@ -9,6 +24,12 @@ export const handleOnReceived = dispatch => {
   debugger;
 };
 
+export const addMessages = messages => {
+  return {
+    type: "ADD_MESSAGES",
+    messages: messages
+  };
+};
 export const addMessage = message => {
   return {
     type: "ADD_CAMPAIGN",

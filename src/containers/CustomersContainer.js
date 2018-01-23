@@ -1,23 +1,52 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { CustomersList } from "../components/CustomersList";
+import CustomersList from "../components/customers/CustomersList";
+import CustomersForm from "../components/customers/CustomersForm";
+import CustomerDetails from "../components/customers/CustomerDetails";
+import { removeCustomer } from "../actions/customers";
 import SideMenu from "./SideMenu";
 import { List } from "semantic-ui-react";
 
 class CustomersContainer extends Component {
+  displayComponent = () => {
+    const match = this.props.match.path;
+    const Id = this.props.match.params.id;
+    switch (true) {
+      case match === "/customers": {
+        return <CustomersForm />;
+      }
+      case match === "/customers/new": {
+        return <CustomersForm />;
+      }
+      case match === "/customers/edit/:id": {
+        // debugger;
+        return (
+          <CustomersForm
+            selected={this.props.customers.find(customer => {
+              return customer.id === parseInt(Id);
+            })}
+          />
+        );
+      }
+      default:
+        return <CustomerDetails />;
+    }
+  };
+
   render() {
     // console.log("container", this.props);
     const match = this.props.match.path;
     let customersList = this.props.customers.map(customer => {
       return (
-        <List vertical relaxed="very">
+        <List verticalAlign="top">
           <CustomersList
             key={customer.id}
+            customer={customer}
             id={customer.id}
             name={customer.name}
             image_url={customer.image_url}
-            unread_messages={customer.unread_messages}
+            unreadMessages={customer.unread_messages}
           />
         </List>
       );
@@ -29,18 +58,16 @@ class CustomersContainer extends Component {
           List={customersList}
           className="ui grid container left floated"
         />
-        <div className="ten wide column ">
-          <div>
-            {match === "/customers"
-              ? "Campaign Generic Page"
-              : "Campaign Detail Page"}
-          </div>
+        <div className="ui ten wide column ">
+          <div>{this.displayComponent()}</div>
         </div>
       </div>
     );
   }
 }
 const mapStateToProps = store => {
-  return { customers: store.customers.customers };
+  return { customers: store.customers };
 };
-export default withRouter(connect(mapStateToProps, null)(CustomersContainer));
+export default withRouter(
+  connect(mapStateToProps, { removeCustomer })(CustomersContainer)
+);

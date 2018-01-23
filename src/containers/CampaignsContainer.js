@@ -2,7 +2,7 @@ import React, { Component } from "react";
 // import { Divider } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { CampaignsList } from "../components/CampaignsList";
+import { CampaignsList } from "../components/campaigns/CampaignsList";
 import SideMenu from "./SideMenu";
 
 class CampaignsContainer extends Component {

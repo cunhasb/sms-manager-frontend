@@ -1,20 +1,21 @@
 import React from "react";
-import { Input, Label, Menu, List } from "semantic-ui-react";
+import { Input, Label, Menu, List, Icon } from "semantic-ui-react";
 
 const SideMenu = props => {
   // debugger;
   return (
     <div className="ui massive vertical menu ">
-      <div className="horizontally fitted item">
+      <div className="ui horizontally fitted item">
         <div className="ui icon input ">
           <input
+            className="ui"
             type="text"
             name="query"
             placeholder={props.searchBy}
             onChange={props.handleChange}
             value={props.query}
           />
-          <i className="search icon" />
+          <Icon name="search" />
         </div>
       </div>
       <div className="active item">

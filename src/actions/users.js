@@ -1,6 +1,8 @@
 // import { login, currentUser } from "../services/api";
 import { API_ROOT } from "../constants/";
 import { G_SECRET } from "../secrets.js";
+import { getMessages, addMessages } from "./messages";
+import { getCarriers } from "./carriers";
 const headers = {
   Accept: "application/json",
   "Content-Type": "application/json",
@@ -70,7 +72,14 @@ export const handleSignIn = dispatch => {
                 console.log("User not authorized");
                 break;
             }
-          });
+            return json.user;
+          })
+          .then(user => {
+            return user;
+            dispatch(getMessages(user.id));
+          })
+          .then(user => dispatch(getCarriers(user.id)));
+        // return user;
       });
   };
 };

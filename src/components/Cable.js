@@ -7,9 +7,9 @@ import { handleOnReceived as customersHandleOnReceived } from "../actions/campai
 import { handleOnReceived as messagesHandleOnReceived } from "../actions/messages";
 
 const Cable = props => {
-  console.log("cable", props);
+  // console.log("cable", props);
   const handleOnReceive = response => {
-    // debugger;
+    debugger;
     props.campaignsHandleOnReceived(response);
   };
   if (props.loggedIn) {
@@ -20,7 +20,9 @@ const Cable = props => {
             channel: "CampaignsChannel",
             id: props.authUser.id
           }}
-          onReceived={props.campaignsHandleOnReceived}
+          onReceived={() => {
+            props.messagesHandleOnReceived;
+          }}
         />
         <ActionCable
           channel={{

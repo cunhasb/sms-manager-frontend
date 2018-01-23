@@ -5,9 +5,9 @@ import { handleSignIn } from "../actions/users";
 import Home from "../components/Home";
 import CampaignsContainer from "../containers/CampaignsContainer";
 import CustomersContainer from "../containers/CustomersContainer";
-import CampaignForm from "../components/CampaignForm";
-import CustomersForm from "../components/CustomersForm";
-import Messages from "../components/Messages";
+import CampaignForm from "../components/campaigns/CampaignForm";
+import CustomersForm from "../components/customers/CustomersForm";
+import MessagesContainer from "../containers/MessagesContainer";
 // import CustomersDraggableContainer from "../containers/CustomersDraggableContainer";
 // import Container from "../components/Container";
 
@@ -18,7 +18,7 @@ class SmsContainer extends React.Component {
   };
   componentDidMount = () => {};
   handleClick = id => {
-    console.log("handleclick", id);
+    // console.log("handleclick", id);
     this.setState({ activeCampaign: id });
   };
   handleReceivedCampaign = response => {
@@ -39,7 +39,7 @@ class SmsContainer extends React.Component {
   };
 
   render() {
-    console.log("props - smscontainer", this.props);
+    // console.log("props - smscontainer", this.props);
     // console.log("this state", this.state);
     const loggedIn = this.props.loggedIn;
     const { campaign, activeCampaign } = this.state;
@@ -100,30 +100,33 @@ class SmsContainer extends React.Component {
               path="/customers/new"
               render={() =>
                 this.props.loggedIn ? (
-                  <CustomersForm />
+                  <CustomersContainer />
                 ) : (
                   <Redirect to="/login" />
                 )
               }
             />
             <Route
-              path="/customers/:id/"
-              render={({ match }) => {
-                const customers = this.props.customers.find(el => {
-                  // debugger;
-                  return el.id === match.params.id;
-                });
-                campaign ? (
-                  this.props.handleClick(campaign.id)
+              exact
+              path="/customers/edit/:id"
+              render={() =>
+                this.props.loggedIn ? (
+                  <CustomersContainer />
                 ) : (
-                  <div>Loading</div>
-                );
-                return (
-                  <div>
-                    <CustomersContainer />
-                  </div>
-                );
-              }}
+                  <Redirect to="/login" />
+                )
+              }
+            />
+            <Route
+              exact
+              path="/customers/:id"
+              render={() =>
+                this.props.loggedIn ? (
+                  <CustomersContainer />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
             />
             <Route
               exact
@@ -141,7 +144,7 @@ class SmsContainer extends React.Component {
               path="/Messages"
               render={() =>
                 this.props.loggedIn ? (
-                  <div className="campaignsList" />
+                  <MessagesContainer />
                 ) : (
                   <Redirect to="/login" />
                 )
@@ -162,26 +165,11 @@ const mapStateToProps = state => {
   return {
     loggedIn: !!state.users.authUser,
     campaigns: state.campaigns,
-    customers: state.customers.customers
+    customers: state.customers.customers,
+    messages: state.message
   };
 };
 
 export default withRouter(
   connect(mapStateToProps, { handleSignIn })(SmsContainer)
 );
-
-//helpers
-
-const findActiveCampaign = (campaigns, activeCampaign) => {
-  return campaigns.find(campaign => campaign.id === activeCampaign);
-};
-
-const mapCampaigns = (campaigns, handleClick) => {
-  return campaigns.map(campaign => {
-    return (
-      <li key={campaign.id} onClick={() => handleClick(campaign.id)}>
-        {campaign.name}
-      </li>
-    );
-  });
-};

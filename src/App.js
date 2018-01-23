@@ -10,7 +10,7 @@ import SmsContainer from "./containers/SmsContainer";
 
 class App extends Component {
   componentDidMount() {
-    console.log("mounting - props", this.props);
+    // console.log("mounting - props", this.props);
     // start();
     // debugger;
     this.props.startGoogleClient();

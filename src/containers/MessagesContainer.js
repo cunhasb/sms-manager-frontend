@@ -8,12 +8,13 @@ import { List } from "semantic-ui-react";
 class MessagesContainer extends Component {
   render() {
     // console.log("container", this.props);
+    const Uniqid = require("uniqid");
     const match = this.props.match.path;
     let messagesList = this.props.messages.map(messages => {
       return (
-        <List verticalAlign="top" key={messages.id}>
+        <List verticalAlign="top" key={Uniqid}>
           <MessagesList
-            key={messages.id}
+            key={Uniqid}
             id={messages.id}
             name={messages.name}
             message={messages.message}

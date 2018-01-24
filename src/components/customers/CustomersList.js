@@ -6,10 +6,11 @@ import { removeCustomer, editCustomer } from "../../actions/customers";
 
 class CustomersList extends Component {
   render() {
+    const Uniqid = require("uniqid");
     const { removeCustomer } = this.props;
     // console.log("list", this.props);
     return (
-      <Link key={this.props.id} to={`/customers/${this.props.id}`}>
+      <Link key={Uniqid} to={`/customers/${this.props.id}`}>
         <List.Item size="huge">
           <List.Content>
             <Image circular avatar src={this.props.image_url} />
@@ -23,7 +24,7 @@ class CustomersList extends Component {
             />
             <Link
               customer={this.props.customer}
-              key={this.props.id}
+              key={Uniqid}
               to={`/customers/edit/${this.props.id}`}
             >
               <Button

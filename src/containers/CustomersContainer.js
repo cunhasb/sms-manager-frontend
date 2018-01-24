@@ -36,12 +36,13 @@ class CustomersContainer extends Component {
 
   render() {
     // console.log("container", this.props);
+    const Uniqid = require("uniqid");
     const match = this.props.match.path;
     let customersList = this.props.customers.map(customer => {
       return (
         <List verticalAlign="top">
           <CustomersList
-            key={customer.id}
+            key={Uniqid}
             customer={customer}
             id={customer.id}
             name={customer.name}

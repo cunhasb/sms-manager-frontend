@@ -25,7 +25,7 @@ const SideMenu = props => {
             style={{
               overflowY: "auto",
               whiteSpace: "nowrap",
-              height: "700px",
+              height: "580px",
               width: "100%",
               textAlign: "left"
             }}

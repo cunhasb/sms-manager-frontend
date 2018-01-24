@@ -13,9 +13,7 @@ const customersReducer = (state = [], action) => {
     }
     case "REMOVE_CUSTOMER": {
       index = state.findIndex(customer => customer.id === action.customer.id);
-      // debugger;
       return [...state.slice(0, index), ...state.slice(index + 1)];
-      // debugger;
     }
     default:
       return state;

@@ -3,7 +3,7 @@ import { ActionCable } from "react-actioncable-provider";
 import { connect } from "react-redux";
 import { handleOnReceived as usersHandleOnReceived } from "../actions/users";
 import { handleOnReceived as campaignsHandleOnReceived } from "../actions/campaigns";
-import { handleOnReceived as customersHandleOnReceived } from "../actions/campaigns";
+import { handleOnReceived as customersHandleOnReceived } from "../actions/customers";
 import { handleOnReceived as messagesHandleOnReceived } from "../actions/messages";
 
 const Cable = props => {

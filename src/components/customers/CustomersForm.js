@@ -26,6 +26,7 @@ class CustomerForm extends React.Component {
     e.preventDefault();
     console.log("hit submit", this.state.name);
     this.props.addCustomer(this.state);
+    this.setState({ name: "", email: "", phone: "", carrier: "" });
   };
 
   render = () => {
@@ -38,18 +39,21 @@ class CustomerForm extends React.Component {
             name="name"
             placeholder="Name"
             width={6}
+            value={this.state.name}
             onChange={this.handleChange}
           />
           <Form.Input
             name="email"
             placeholder="Email"
             width={4}
+            value={this.state.email}
             onChange={this.handleChange}
           />
           <Form.Input
             name="phone"
             placeholder="Phone"
             width={3}
+            value={this.state.phone}
             onChange={this.handleChange}
           />
           <Form.Select
@@ -58,6 +62,7 @@ class CustomerForm extends React.Component {
             options={this.props.carriers}
             placeholder="Phone Carrier"
             width={4}
+            value={this.state.carrier}
             onChange={this.handleChange}
           />
           <Button type="submit" floated="right">
@@ -77,18 +82,7 @@ const mapStateToProps = store => {
     text: carrier.name + " - " + carrier.country,
     value: carrier.id
   }));
-  // debugger;
-  // console.log("store customers", store.customers.customers);
-  //   let selectedCustomer = {};
-  //   if (!!this.props) {
-  //     selectedCustomer = store.customers.customers.find(customer => {
-  //       customer.id === this.props.match.params.id;
-  //     });
-  //   } else {
-  //     selectedCustomer = {
-  //       customer: { id: "", name: "", email: "", phone: "", carrier: "" }
-  //     };
-  //   }
+
   return {
     carriers: carriersList,
     customer: { id: "", name: "", email: "", phone: "", carrier: "" }

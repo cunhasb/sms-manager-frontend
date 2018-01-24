@@ -5,7 +5,7 @@ import { handleSignIn } from "../actions/users";
 import Home from "../components/Home";
 import CampaignsContainer from "../containers/CampaignsContainer";
 import CustomersContainer from "../containers/CustomersContainer";
-import CampaignForm from "../components/campaigns/CampaignForm";
+import CampaignsForm from "../components/campaigns/CampaignsForm";
 import CustomersForm from "../components/customers/CustomersForm";
 import MessagesContainer from "../containers/MessagesContainer";
 // import CustomersDraggableContainer from "../containers/CustomersDraggableContainer";
@@ -59,30 +59,33 @@ class SmsContainer extends React.Component {
               path="/campaigns/new"
               render={() =>
                 this.props.loggedIn ? (
-                  <CampaignForm />
+                  <CampaignsContainer />
                 ) : (
                   <Redirect to="/login" />
                 )
               }
             />
             <Route
-              path="/campaigns/:id/"
-              render={({ match }) => {
-                const campaign = this.props.campaigns.find(el => {
-                  // debugger;
-                  return el.id === match.params.id;
-                });
-                campaign ? (
-                  this.props.handleClick(campaign.id)
+              exact
+              path="/campaigns/edit/:id"
+              render={() =>
+                this.props.loggedIn ? (
+                  <CampaignsContainer />
                 ) : (
-                  <div>Loading</div>
-                );
-                return (
-                  <div>
-                    <CampaignsContainer />
-                  </div>
-                );
-              }}
+                  <Redirect to="/login" />
+                )
+              }
+            />
+            <Route
+              exact
+              path="/campaigns/:id"
+              render={() =>
+                this.props.loggedIn ? (
+                  <CampaignsContainer />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
             />
             <Route
               exact

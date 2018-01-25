@@ -67,7 +67,8 @@ class CampaignsContainer extends Component {
   }
 }
 const mapStateToProps = store => {
-  return { campaigns: store.campaigns };
+  // debugger;
+  return { campaigns: store.campaigns.campaigns };
 };
 export default withRouter(
   connect(mapStateToProps, { removeCampaign })(CampaignsContainer)

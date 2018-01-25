@@ -28,108 +28,210 @@ const Uniqid = require("uniqid");
 class CampaignsForm extends React.Component {
   state = {
     customers: [],
-    newCampaign: { customers: [] }
+    newCampaign: { customers: [], interests: [], name: "", message: "" },
+    campaignQuery: "",
+    customerQuery: "",
+    selectedQuery: ""
   };
   // componentWillReceiveProps = () => {
   //   this.setState({ customer: this.props.selected });
   // };
   componentDidMount = () => {
-    const customerComponents = this.props.customers.map(customer => {
-      return (
-        <CustomersList
-          key={Uniqid}
-          customer={customer}
-          id={customer.id}
-          name={customer.name}
-          phone={customer.phone}
-          image_url={customer.image_url}
-          unreadMessages={customer.unread_messages}
-          addCustomer={this.handleAddCustomer}
-          removeCustomer={this.handleRemoveCustomer}
-        />
-      );
-    });
+    // debugger;
+    if (!this.props.savedSate) {
+      const customerComponents = this.props.customers.map(customer => {
+        return (
+          <CustomersList
+            key={`cl${customer.id} - ${Uniqid}`}
+            customer={customer}
+            id={customer.id}
+            name={customer.name}
+            phone={customer.phone}
+            image_url={customer.image_url}
+            unreadMessages={customer.unread_messages}
+            addCustomer={this.handleAddCustomer}
+            removeCustomer={this.handleRemoveCustomer}
+          />
+        );
+      });
 
-    let customerList = customerComponents.filter(
-      component => !component.props.customer.select
-    );
-    let selectedList = customerComponents.filter(
-      component => component.props.customer.select
-    );
-    this.setState({
-      customers: customerList,
-      newCampaign: { customers: selectedList }
-    });
+      this.setState({
+        customers: customerComponents,
+        newCampaign: { customers: [], interests: [], name: "", message: "" },
+        campaignQuery: "",
+        customerQuery: "",
+        selectedQuery: ""
+      });
+      this.props.saveCampaignState(this.state);
+    } else {
+      this.setState(this.props.savedState);
+    }
+  };
+  componentWillUnmount = () => {
     this.props.saveCampaignState(this.state);
   };
-  componentDidUpdate = () => {
+  filter = (list, name) => {
     // debugger;
-  };
-  handleChange = e => {
-    this.setState({ newCampaign: { [e.target.name]: e.target.value } });
+    return list.filter(el => {
+      let hasNumber = this.state[name].replace(/[^0-9]/g, "") > 0;
+      return hasNumber
+        ? el.props.customer.name.toLowerCase().includes(this.state[name]) ||
+            el.props.customer.phone
+              .replace(/[^0-9]/g, "")
+              .includes(this.state[name].replace(/[^0-9]/g, ""))
+        : el.props.customer.name.toLowerCase().includes(this.state[name]);
+    });
   };
 
+  // handleSelectAll = (e, name) => {
+  //   debugger;
+  //
+  //   let selectedList;
+  //   if (name === "customerCheckbox") {
+  //     selected = this.state.customers.map(component => {
+  //       component.props.customer.selected = true;
+  //       return component;
+  //     });
+  //
+  //     this.setState(previous => {
+  //       const customerList = previous.customers.filter;
+  //       return {
+  //         customers: [],
+  //         newCampaign: {
+  //           customers: [...previousnewCampaign.customers, newList]
+  //         }
+  //       };
+  //     });
+  //   } else if (name === "selectedCheckbox") {
+  //     newList = this.state.newCampaign.customers.map(component => {
+  //       component.props.customer.selected = false;
+  //       return component;
+  //     });
+  //   }
+  //   this.setState({ customers: [], newCampaign: { customers: newList } });
+  // };
+  handleFilter = e => {
+    const name = e.target.name;
+    const value = e.target.value;
+    this.setState({ [name]: value });
+    this.props.saveCampaignState(this.state);
+  };
+  handleChange = (e, { value, name }) => {
+    // debugger;
+    console.log("value", value, "name", name);
+    // debugger;
+    let x = this.state;
+    // debugger;
+    if (name === "customerQuery" || name === "selectedQuery") {
+      this.setState({ [name]: value });
+    } else {
+      // debugger;
+
+      this.setState(previous => {
+        let result = previous.newCampaign;
+        result[name] = value;
+        return {
+          customers: previous.customers,
+          newCampaign: result,
+          campaignQuery: previous.campaignQuery,
+          customerQuery: previous.customerQuery,
+          selectedQuery: previous.selectedQuery
+        };
+      });
+    }
+    this.props.saveCampaignState(this.state);
+  };
+
+  handleClick = e => {
+    debugger;
+  };
   handleSubmit = e => {
     e.preventDefault();
-    console.log("hit submit", this.state.name);
-    this.props.addCampaigns(this.state);
+    let state = this.state.newCampaign;
+    let customers = state.customers.map(customer => {
+      return customer.props.customer.id;
+    });
+    state[customers] = customers;
+    let campaign = {
+      customers: customers,
+      interests: this.state.newCampaign.interests,
+      name: this.state.newCampaign.name,
+      message: this.state.newCampaign.message
+    };
+
+    // debugger;
+    this.props.addCampaign(campaign);
   };
-  handleAddCustomer = (id, selected) => {
+  handleAddCustomer = (e, id, selected) => {
     const index = this.state.customers.findIndex(
       component => component.props.customer.id === id
     );
-    let x = this.state;
     let component = this.state.customers[index];
     // debugger;
     component.props.customer.selected = true;
     this.setState(previous => {
+      let customers = [
+        ...previous.customers.slice(0, index),
+        ...previous.customers.slice(index + 1)
+      ];
+      let newCampaignCustomers = [...previous.newCampaign.customers, component];
+      let newCampaign = previous.newCampaign;
+      // debugger;
+      newCampaign.customers = newCampaignCustomers;
       return {
-        customers: [
-          ...previous.customers.slice(0, index),
-          ...previous.customers.slice(index + 1)
-        ],
-        newCampaign: {
-          customers: [...this.state.newCampaign.customers, component]
-        }
+        customers: customers,
+        newCampaign: newCampaign,
+        campaignQuery: previous.campaignQuery,
+        customerQuery: previous.customerQuery,
+        selectedQuery: previous.selectedQuery
       };
     });
-    // dispatch(this.props.saveCampaignState(this.state))
+
+    this.props.saveCampaignState(this.state);
   };
-  handleRemoveCustomer = (id, selected) => {
+  handleRemoveCustomer = (e, id, selected) => {
     const index = this.state.newCampaign.customers.findIndex(
       component => component.props.customer.id === id
     );
-    let x = this.state;
     let component = this.state.newCampaign.customers[index];
-    // debugger;
     component.props.customer.selected = false;
     this.setState(previous => {
+      let customers = [...previous.customers, component];
+      let newCampaignCustomers = [
+        ...previous.newCampaign.customers.slice(0, index),
+        ...previous.newCampaign.customers.slice(index + 1)
+      ];
+      let newCampaign = previous.newCampaign;
+      // debugger;
+      newCampaign.customers = newCampaignCustomers;
       return {
-        customers: [...previous.customers, component],
-        newCampaign: {
-          customers: [
-            ...previous.newCampaign.customers.slice(0, index),
-            ...previous.newCampaign.customers.slice(index + 1)
-          ]
-        }
+        customers: customers,
+        newCampaign: newCampaign,
+        campaignQuery: previous.campaignQuery,
+        customerQuery: previous.customerQuery,
+        selectedQuery: previous.selectedQuery
       };
     });
+    this.props.saveCampaignState(this.state);
   };
-  handleSelect = e => {};
+  handleDropDown = (e, { value, name }) => {
+    debugger;
+  };
   render = () => {
-    const Uniqid = require("uniqid");
+    // const Uniqid = require("uniqid");
+    // this.populateLists();
     console.log("campaign form props", this.props);
     console.log("Campaign form state", this.state);
     const { customers, campaings } = this.props;
     // debugger;
     let customersList = (
       <List divided verticalAlign="top">
-        {this.state.customers}
+        {this.filter(this.state.customers, "customerQuery")}
       </List>
     );
     let customersAddedList = (
       <List divided verticalAlign="top">
-        {this.state.newCampaign.customers}
+        {this.filter(this.state.newCampaign.customers, "selectedQuery")}
       </List>
     );
     return (
@@ -137,7 +239,7 @@ class CampaignsForm extends React.Component {
         <Grid.Row stretched>
           <Grid.Column>
             <Segment>
-              <Form onSubmit={this.handleSubmit}>
+              <Form>
                 <Form.Group>
                   <Form.Input
                     width={8}
@@ -146,17 +248,23 @@ class CampaignsForm extends React.Component {
                     onChange={this.handleChange}
                   />
                   <Dropdown
+                    name="interests"
+                    value={this.state.newCampaign.interests}
                     placeholder="Interests"
                     fluid
                     multiple
                     selection
+                    onChange={this.handleChange}
                     options={DropDownData}
                   />
                 </Form.Group>
                 <Form.Group>
                   <TextArea
+                    onChange={this.handleChange}
+                    name="message"
                     autoHeight
-                    placeholder="Try adding multiple lines"
+                    placeholder="Message"
+                    value={this.state.newCampaign.message}
                   />
                 </Form.Group>
               </Form>
@@ -172,22 +280,44 @@ class CampaignsForm extends React.Component {
               >
                 <div className="ui horizontally fitted item">
                   <div className="ui icon input ">
-                    <Form.Group>
-                      <Form.Input
-                        name="customer-query"
-                        width={8}
-                        placeholder="Name"
-                        onChange={this.handleChange}
-                        placeholder="Customer"
-                        onChange={this.handleChange}
-                        value={this.state.query}
-                      />
-                      <div className="ui icon input ">
-                        <Checkbox label="All" />
-                      </div>
-                    </Form.Group>
+                    <input
+                      className="ui"
+                      type="text"
+                      name="customerQuery"
+                      placeholder="Customer"
+                      onChange={this.handleFilter}
+                      value={this.state.customerQuery}
+                    />
+                    <Icon name="search" />
                   </div>
                 </div>
+                {
+                  // <div className="ui horizontally fitted item">
+                  // <Form>
+                  //   <Form.Group>
+                  //     <Form.Input
+                  //       name="customerQuery"
+                  //       placeholder="Customer"
+                  //       onChange={this.handleChange}
+                  //       value={this.state.query}
+                  //       width={12}
+                  //     />
+                  //     <Icon corner name="search" />
+                  //
+                  //   <Label>
+                  //   <Form.Checkbox
+                  //     name="customerCheckbox"
+                  //     onChange={e =>
+                  //       this.handleChange(e, "customerCheckbox")
+                  //     }
+                  //     label="All"
+                  //   />
+                  // </Label>
+                  //
+                  //   </Form.Group>
+                  // </Form>
+                  // </div>
+                }
                 <div className="active item">
                   <div className=" bottom attached segment pushable">
                     <div
@@ -218,16 +348,39 @@ class CampaignsForm extends React.Component {
                     <input
                       className="ui"
                       type="text"
-                      name="query"
-                      placeholder="Customer"
-                      onChange={this.handleChange}
-                      value={this.state.query}
+                      name="selectedQuery"
+                      placeholder="Selected"
+                      onChange={this.handleFilter}
+                      value={this.state.selectedQuery}
                     />
-                    <div className="ui icon input ">
-                      <Checkbox label="All" />
-                    </div>
+                    <Icon name="search" />
                   </div>
                 </div>
+                {
+                  //   <div className="ui horizontally fitted item">
+                  //   <Form>
+                  //     <Form.Group>
+                  //       <Form.Input
+                  //         name="selectedQuery"
+                  //         placeholder="Selected"
+                  //         onChange={this.handleChange}
+                  //         value={this.state.query}
+                  //         width={12}
+                  //       />
+                  //       <Icon corner name="search" />
+                  //       {
+                  //         // <Label>
+                  //         // <Form.Checkbox
+                  //         //   name="selectedCheckbox"
+                  //         //   label="All"
+                  //         //   onClick={this.handleClick}
+                  //         // />
+                  //         // </Label>
+                  //       }
+                  //     </Form.Group>
+                  //   </Form>
+                  // </div>
+                }
                 <div className="active item">
                   <div className=" bottom attached segment pushable">
                     <div
@@ -246,7 +399,7 @@ class CampaignsForm extends React.Component {
                 </div>
               </div>
             </Segment>
-            <Button type="submit" floated="left">
+            <Button onClick={this.handleSubmit} floated="left">
               Submit Campaign
             </Button>
           </Grid.Column>
@@ -259,7 +412,8 @@ class CampaignsForm extends React.Component {
 const mapStateToProps = store => {
   return {
     campaigns: store.campaigns,
-    customers: store.customers
+    customers: store.customers,
+    savedState: store.campaigns.campaignState
   };
 };
 export default withRouter(

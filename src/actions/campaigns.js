@@ -7,11 +7,10 @@ export const handleOnReceived = () => {};
 export const editCampaign = () => {};
 
 export const saveCampaignState = state => {
-  return dispatch => {
-    return { type: "SAVE_CAMPAIGN_STATE", state: state };
-  };
+  return { type: "SAVE_CAMPAIGN_STATE", state: state };
 };
 export const addCampaign = campaign => {
+  // debugger;
   return dispatch => {
     return fetch(`${API_ROOT}/campaigns/`, {
       method: "POST",

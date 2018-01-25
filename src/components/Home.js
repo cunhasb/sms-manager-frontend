@@ -53,7 +53,7 @@ const Home = props => {
 const mapStateToProps = state => {
   return {
     customers: state.customers,
-    campaigns: state.campaigns,
+    campaigns: state.campaigns.campaigns,
     messages: state.messages,
     carriers: state.carriers
   };

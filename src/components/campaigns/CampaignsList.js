@@ -10,7 +10,7 @@ class CampaignsList extends Component {
     const { removeCampaign } = this.props;
     // console.log("list", this.props);
     return (
-      <Link key={Uniqid} to={`/campaigns/${this.props.id}`}>
+      <Link key={`clc - ${Uniqid}`} to={`/campaigns/${this.props.id}`}>
         <List.Item size="huge">
           <List.Content>
             {this.props.name}

@@ -10,14 +10,20 @@ class CustomersListCampaigns extends Component {
     const { removeCustomer, addCustomer } = this.props;
     const selected = this.props.customer.selected;
     return (
-      <List.Item key={Uniqid} size="huge" selected={this.props.selected}>
+      <List.Item
+        key={`clc - ${Uniqid}`}
+        size="huge"
+        selected={this.props.selected}
+      >
         <List.Content>
           <Image circular avatar src={this.props.image_url} />
           {this.props.name}
           {this.props.phone}
           {selected ? (
             <Button
-              onClick={() => removeCustomer(this.props.id, this.props.selected)}
+              onClick={e =>
+                removeCustomer(e, this.props.id, this.props.selected)
+              }
               size="mini"
               circular
               floated="right"
@@ -25,7 +31,7 @@ class CustomersListCampaigns extends Component {
             />
           ) : (
             <Button
-              onClick={() => addCustomer(this.props.id, this.props.selected)}
+              onClick={e => addCustomer(e, this.props.id, this.props.selected)}
               size="mini"
               circular
               floated="right"

@@ -10,8 +10,8 @@ const SideMenu = props => {
           <input
             className="ui"
             type="text"
-            name="query"
-            placeholder={props.searchBy}
+            name="Search"
+            placeholder="Search"
             onChange={props.handleChange}
             value={props.query}
           />

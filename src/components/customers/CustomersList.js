@@ -10,8 +10,16 @@ class CustomersList extends Component {
     const { removeCustomer } = this.props;
     // console.log("list", this.props);
     return (
-      <Link key={Uniqid} to={`/customers/${this.props.id}`}>
-        <List.Item size="huge">
+      <Link
+        key={`cl- ${this.props.id}-${Uniqid()}`}
+        to={`/customers/${this.props.id}`}
+      >
+        <List.Item
+          size="huge"
+          name="customer"
+          id={this.props.id}
+          onClick={this.props.handleClick}
+        >
           <List.Content>
             <Image circular avatar src={this.props.image_url} />
             {this.props.name}

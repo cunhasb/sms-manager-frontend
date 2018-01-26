@@ -124,8 +124,8 @@ export const handleSignIn = dispatch => {
         return json.user;
       })
       .then(user => {
-        return user;
         dispatch(getMessages(user.id));
+        return user;
       })
       .then(user => dispatch(getCarriers(user.id)));
   }

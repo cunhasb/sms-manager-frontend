@@ -6,6 +6,7 @@ export default (state = [], action) => {
     // }
     case "ADD_MESSAGES": {
       // debugger;
+      console.log("messages reducer", action);
       return action.messages;
     }
     case "REMOVE_CUSTOMERS":

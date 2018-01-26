@@ -4,11 +4,15 @@ import { connect } from "react-redux";
 import CustomersList from "../components/customers/CustomersList";
 import CustomersForm from "../components/customers/CustomersForm";
 import CustomerDetails from "../components/customers/CustomerDetails";
-import { removeCustomer } from "../actions/customers";
+import { removeCustomer, saveSelectedCustomer } from "../actions/customers";
 import SideMenu from "./SideMenu";
 import { List } from "semantic-ui-react";
 
 class CustomersContainer extends Component {
+  state = {
+    search: ""
+  };
+
   displayComponent = () => {
     const match = this.props.match.path;
     const Id = this.props.match.params.id;
@@ -30,24 +34,56 @@ class CustomersContainer extends Component {
         );
       }
       default:
-        return <CustomerDetails />;
+        return (
+          <CustomerDetails
+            selectedCustomer={this.props.customers.selectedCustomer}
+          />
+        );
     }
+  };
+  filter = list => {
+    let x = list;
+    let search = this.state.search;
+    // debugger;
+    return list.filter(el => {
+      return el.name.toLowerCase().includes(this.state.search);
+    });
+  };
+  handleChange = e => {
+    const name = e.target.name;
+    const value = e.target.value;
+    this.setState({ [name]: value });
+  };
+  handleClick = (e, { id, name }) => {
+    // let x = id;
+    // let y = name;
+    // let z = e;
+    // let props = this.props;
+    // debugger;
+    let customer = this.props.customers.find(customer => customer.id === id);
+    this.setState({ selectedCustomer: customer });
+    this.props.saveSelectedCustomer(customer);
+    // debugger;
   };
 
   render() {
-    // console.log("container", this.props);
+    console.log("container state", this.state);
+    console.log("container props", this.props);
     const Uniqid = require("uniqid");
     const match = this.props.match.path;
-    let customersList = this.props.customers.map(customer => {
+    const customersList = this.filter(this.props.customers).map(customer => {
+      console.log("customersList", customersList);
       return (
         <List verticalAlign="top">
           <CustomersList
-            key={Uniqid}
+            key={Uniqid()}
             customer={customer}
             id={customer.id}
             name={customer.name}
             image_url={customer.image_url}
             unreadMessages={customer.unread_messages}
+            handleClick={this.handleClick}
+            selectedCustomer={this.selectedCustomer}
           />
         </List>
       );
@@ -58,6 +94,8 @@ class CustomersContainer extends Component {
         <SideMenu
           List={customersList}
           className="ui grid container left floated"
+          handleChange={this.handleChange}
+          query={this.search}
         />
         <div className="ui ten wide column ">
           <div>{this.displayComponent()}</div>
@@ -70,5 +108,7 @@ const mapStateToProps = store => {
   return { customers: store.customers };
 };
 export default withRouter(
-  connect(mapStateToProps, { removeCustomer })(CustomersContainer)
+  connect(mapStateToProps, { removeCustomer, saveSelectedCustomer })(
+    CustomersContainer
+  )
 );

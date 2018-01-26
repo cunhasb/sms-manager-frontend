@@ -6,7 +6,7 @@ export const getMessages = (userId, id) => {
     return fetch(`${API_ROOT}/messages/`)
       .then(res => res.json())
       .then(json => {
-        // console.log("getMessages fetch", json);
+        console.log("getMessages fetch", json);
         dispatch({
           type: "ADD_MESSAGES",
           messages: json
@@ -61,4 +61,7 @@ export const commitAdd = message => {
 };
 export const removeMessage = id => {
   return { type: "REMOVE_MESSAGE", messageId: id };
+};
+export const editMessage = id => {
+  return { type: "EDIT_MESSAGE", messageId: id };
 };

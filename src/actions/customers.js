@@ -58,6 +58,10 @@ export const removeCustomer = id => {
 export const handleOnReceived = dispatch => {
   debugger;
 };
+export const saveSelectedCustomer = customer => {
+  return { type: "SAVE_SELECTED_CUSTOMER", customer: customer };
+};
+
 export const editCustomer = customer => {
   return { type: "EDIT_CUSTOMER", customerId: customer.id };
 };

@@ -9,6 +9,8 @@ import SideMenu from "./SideMenu";
 import { List } from "semantic-ui-react";
 
 class CampaignsContainer extends Component {
+  state = { search: "" };
+
   displayComponent = () => {
     const match = this.props.match.path;
     const Id = this.props.match.params.id;
@@ -33,12 +35,22 @@ class CampaignsContainer extends Component {
         return <CampaignDetails />;
     }
   };
+  handleChange = e => {
+    const name = e.target.name;
+    const value = e.target.value;
+    this.setState({ [name]: value });
+  };
 
+  filter = list => {
+    return list.filter(el => {
+      return el.name.includes(this.state.search);
+    });
+  };
   render() {
     const Uniqid = require("uniqid");
     console.log("container", this.props);
     const match = this.props.match.path;
-    let campaignsList = this.props.campaigns.map(campaign => {
+    let campaignsList = this.filter(this.props.campaigns).map(campaign => {
       return (
         <List verticalAlign="top">
           <CampaignsList
@@ -58,6 +70,8 @@ class CampaignsContainer extends Component {
           key={Uniqid}
           List={campaignsList}
           className="ui grid container left floated"
+          query={this.state.search}
+          handleChange={this.handleChange}
         />
         <div className="ui ten wide column ">
           <div>{this.displayComponent()}</div>

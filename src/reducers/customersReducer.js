@@ -15,6 +15,11 @@ const customersReducer = (state = [], action) => {
       index = state.findIndex(customer => customer.id === action.customer.id);
       return [...state.slice(0, index), ...state.slice(index + 1)];
     }
+    case "SAVE_SELECTED_CUSTOMER": {
+      let newState = state;
+      state.selectedCustomer = action.customer;
+      return state;
+    }
     default:
       return state;
   }

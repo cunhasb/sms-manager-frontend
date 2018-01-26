@@ -144,7 +144,7 @@ class SmsContainer extends React.Component {
             />
             <Route
               exact
-              path="/Messages"
+              path="/messages/new"
               render={() =>
                 this.props.loggedIn ? (
                   <MessagesContainer />
@@ -153,6 +153,40 @@ class SmsContainer extends React.Component {
                 )
               }
             />
+            <Route
+              exact
+              path="/messages/edit/:id"
+              render={() =>
+                this.props.loggedIn ? (
+                  <MessagesContainer />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
+            />
+            <Route
+              exact
+              path="/messages/:id"
+              render={() =>
+                this.props.loggedIn ? (
+                  <MessagesContainer />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
+            />
+            <Route
+              exact
+              path="/messages"
+              render={() =>
+                this.props.loggedIn ? (
+                  <MessagesContainer />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
+            />
+
             <Route
               path="/"
               render={() => (loggedIn ? <Home /> : <Redirect to="/login" />)}
